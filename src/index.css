@@ -1,0 +1,20 @@
+:root {
+    --primary-bg1: #083130;
+    --primary-bg2: #04070a;
+    --footer: rgba(0,0,0,0.5);
+    --header: rgba(8, 49, 48, 0.2);
+}
+
+body{
+    margin: 0 auto;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('/fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf') format('truetype')
+}
+
+*{
+    font-family: "Space Grotesk", sans-serif;
+}
+
