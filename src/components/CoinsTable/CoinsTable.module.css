@@ -1,3 +1,6 @@
+.container{
+    padding: 20px;
+}
 .table {
     width: 100%;
     border: none;
@@ -50,4 +53,41 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+.center img{
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+}
+
+.hover:hover{
+    cursor: pointer;
+    background-color: var(--footer);
+    transition: 0.5s ease-in;
+}
+.filters{
+    margin-bottom: 30px;
+}
+
+.filters label {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    color: white;
+}
+.filters input{
+    accent-color: var(--accent-green);
+    cursor: pointer;
+}
+.range>span{
+    background-color: var(--accent-green);
+    border: 1px solid var(--accent-green)
+}
+
+.container p{
+    height: 20px;
+    text-align: center;
+    color: white;
+    font-size: 30px;
 }
