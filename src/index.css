@@ -3,10 +3,13 @@
     --primary-bg2: #04070a;
     --footer: rgba(0,0,0,0.5);
     --header: rgba(8, 49, 48, 0.2);
+    --accent-green: #00a571;
+    --accent-red: #ff5858;
 }
 
 body{
     margin: 0 auto;
+    width: 100%;
 }
 
 @font-face {
