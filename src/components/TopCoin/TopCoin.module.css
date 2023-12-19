@@ -1,0 +1,66 @@
+.card {
+    width: 200px;
+    height: 300px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 20px;
+}
+
+.front,
+.back {
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+    padding: 15px;
+    backface-visibility: hidden;
+    overflow: hidden;
+    position: absolute;
+    transition: transform 0.6s linear;
+    left: 0;
+    top:0;
+    box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.7);
+    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.7);
+}
+.front {
+    transform: perspective(600px) rotateY(0deg);
+    background-color: var(--primary-dark-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+.back {
+    transform: perspective(600px) rotateY(180deg);
+    background-color: var(--primary-lighter-blue);
+}
+
+.card:hover > .front {
+    transform: perspective(600px) rotateY(-180deg);
+}
+.card:hover > .back {
+    transform: perspective(600px) rotateY(0deg);
+}
+
+.svg{
+    height: 40px;
+    width: 40px;
+}
+.head{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.front img{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+}
+
+.info span, .info a{
+    color: orange;
+}

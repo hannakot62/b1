@@ -4,6 +4,7 @@ import {fetchCoins} from "../../store/slices/coinsSlice.js";
 import {useEffect} from "react";
 import CoinsTable from "../../components/CoinsTable/CoinsTable";
 
+
 export default function CoinsPage() {
     const dispatch = useDispatch()
     const coins = useSelector(state=>state.coins)
@@ -27,7 +28,6 @@ export default function CoinsPage() {
                 //filters
                 <CoinsTable coins={coins}/>
             </div>
-
         </div>
     )
 }

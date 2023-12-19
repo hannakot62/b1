@@ -1,43 +1,15 @@
 export default function SilverMedalIcon() {
     return (
-        <svg viewBox="-3.5 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <svg viewBox="0 0 120 120" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
-                <path d="M9.73779 18.8436L12.9509 20.6987L6.42609 32.0001L4.55333 27.8234L9.73779 18.8436Z"
-                      fill="#418ED6"></path>
-                <path d="M9.73779 18.8436L6.52467 16.9885L-0.000155079 28.2899L4.55333 27.8234L9.73779 18.8436Z"
-                      fill="#2B63A6"></path>
-                <path d="M14.3218 18.8436L11.1087 20.6987L17.6335 32.0001L19.5062 27.8234L14.3218 18.8436Z"
-                      fill="#2B63A6"></path>
-                <path d="M14.3218 18.8436L17.5349 16.9885L24.0597 28.2899L19.5062 27.8234L14.3218 18.8436Z"
-                      fill="#418ED6"></path>
-                <circle cx="12.0246" cy="11.0622" r="11.0622" fill="#E3E3E3"></circle>
-                <circle cx="12.0247" cy="11.0621" r="8.63501" fill="#595959"></circle>
-                <mask id="mask0_103_1231" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19"
-                      height="18">
-                    <circle cx="12.4857" cy="11.984" r="8.65511" fill="#C28B37"></circle>
-                </mask>
-                <g mask="url(#mask0_103_1231)">
-                    <circle cx="12.0247" cy="11.0622" r="8.65511" fill="url(#paint0_linear_103_1231)"></circle>
-                </g>
-                <path
-                    d="M12.0713 5.04102L13.9383 8.77508L17.6724 9.24183L15.1083 12.1171L15.8054 16.2432L12.0713 14.3762L8.33724 16.2432L9.04049 12.1171L6.47021 9.24183L10.2043 8.77508L12.0713 5.04102Z"
-                    fill="url(#paint1_linear_103_1231)"></path>
-                <defs>
-                    <linearGradient id="paint0_linear_103_1231" x1="12.0247" y1="2.4071" x2="12.0247" y2="19.7173"
-                                    gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#9CA1A3"></stop>
-                        <stop offset="1" stopColor="#9CA1A3" stopOpacity="0"></stop>
-                    </linearGradient>
-                    <linearGradient id="paint1_linear_103_1231" x1="12.0713" y1="5.04102" x2="12.0713" y2="16.2432"
-                                    gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#F1F5F5"></stop>
-                        <stop offset="0.0001" stopColor="white"></stop>
-                        <stop offset="1" stopColor="#F1F5F5"></stop>
-                    </linearGradient>
-                </defs>
-            </g>
-        </svg>
+
+                <g> <polygon className="st0" style={{fill: "#FFBF4B"}}
+                             points="79.7,45.6 60,55.5 40.3,45.6 15.9,94.3 31.1,92.8 38.9,105.9 60,63.9 81.1,105.9 88.9,92.8 104.1,94.3 "></polygon>
+                    <circle className="st1" style={{fill: "#EDEDED"}} cx="60" cy="46.4" r="32.2"></circle>
+                    <circle className="st2" style={{fill: "#BCBCBC"}} cx="60" cy="46.4" r="25.3"></circle>
+                    <path className="st3" style={{fill: "#FFFFFF"}}
+                          d="M61.2,31.2l4.2,8.4c0.2,0.4,0.6,0.7,1,0.8l9.3,1.4c1.1,0.2,1.6,1.5,0.8,2.3l-6.7,6.6c-0.3,0.3-0.5,0.8-0.4,1.2 l1.6,9.3c0.2,1.1-1,2-2,1.4l-8.3-4.4c-0.4-0.2-0.9-0.2-1.3,0L51,62.6c-1,0.5-2.2-0.3-2-1.4l1.6-9.3c0.1-0.4-0.1-0.9-0.4-1.2 l-6.7-6.6c-0.8-0.8-0.4-2.2,0.8-2.3l9.3-1.4c0.4-0.1,0.8-0.3,1-0.8l4.2-8.4C59.3,30.2,60.7,30.2,61.2,31.2z"></path> </g> </g></svg>
     )
 }

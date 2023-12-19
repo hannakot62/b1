@@ -5,11 +5,15 @@
     --header: rgba(8, 49, 48, 0.2);
     --accent-green: #00a571;
     --accent-red: #ff5858;
+    --primary-dark-blue: #0c1923;
+    --primary-lighter-blue: #213d52;
+    --accent-bright-blue: #08f3fe;
 }
 
 body{
     margin: 0 auto;
     width: 100%;
+    background-color: var(--primary-bg1);
 }
 
 @font-face {
