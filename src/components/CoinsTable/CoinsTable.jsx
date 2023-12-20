@@ -16,14 +16,12 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
 
     const [coinsSorted, setCoinsSorted] = useState(coins);
     useEffect(() => {
-        setCoinsSorted(...coins)
+        setCoinsSorted(coins)
     }, [coins]);
 
     const [trs, setTrs] = useState(null);
 
     const favs = useSelector(state => state.favs)
-    console.log(coins)
-console.log(coinsSorted)
 
     const handleSort = (type) => {
         switch (type) {
@@ -165,7 +163,8 @@ console.log(coinsSorted)
                 </tr>
                 </thead>
                 <tbody>
-                {trs}                </tbody>
+                {trs}
+                </tbody>
             </table>
             {(!trs || !trs.length) && <p>no matches 😲</p>}
         </div>

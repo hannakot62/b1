@@ -42,6 +42,7 @@ export default function StatisticsPage() {
 
     },[stats])
 
+    console.log(newest)
     return (isLoading ? <Loader/> :
             (<div className={style.wrapper}>
                 {stats && <div className={style.info}>
@@ -58,8 +59,8 @@ export default function StatisticsPage() {
                     <TopCoin coin={best[2]} position={3}/>
                 </div>}
 
-                <h2 className={style.dark}>Three newest coins</h2>
-                {stats && <div className={style.newest}>
+                {!!newest.length&&<h2 className={style.dark}>Three newest coins</h2>}
+                {!!newest.length && <div className={style.newest}>
                     <TopCoin coin={newest[0]} position={0}/>
                     <TopCoin coin={newest[1]} position={0}/>
                     <TopCoin coin={newest[2]} position={0}/>

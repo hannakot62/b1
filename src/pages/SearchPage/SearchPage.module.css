@@ -1,0 +1,93 @@
+.wrapper{
+    margin-top: 60px;
+    min-height: calc(100vh - 100px);
+    background: linear-gradient(-45deg,  var(--header-hover), var(--primary-bg1),  var(--primary-bg2), var(--accent-bright-blue));
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+.wrapper h1{
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+    color: white;
+}
+
+
+.search{
+    color: white;
+    font-size: 20px;
+    width: 100%;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.search label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    margin: 20px;
+    word-break: break-word;
+}
+.search input{
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid var(--primary-bg1);
+    border-radius: 15px;
+    width: 50%;
+
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.buttons button{
+    width: 80px;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid white;
+    color: white;
+    margin-right: 10px;
+}
+.searchBtn {
+    background-color: var(--primary-bg1);
+}
+.cleanBtn{
+    background-color: var(--footer);
+}
+.searchBtn:hover{
+    background-color: var(--header-hover);
+    transition: 0.3s ease;
+}
+.cleanBtn:hover{
+    background-color: var(--primary-bg2);
+    transition: 0.3s ease;
+}
+.coins, .exchanges, .markets{
+    padding: 30px;
+    color: white;
+}
+
+.nothing{
+    text-align: center;
+    margin-bottom: -50px;
+
+}

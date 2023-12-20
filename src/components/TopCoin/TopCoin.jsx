@@ -25,7 +25,7 @@ export default function TopCoin({coin, position}) {
                 setPlace(<BronzeMedalIcon/>)
                 break;
             }
-            default:{
+            default: {
                 break;
             }
         }
@@ -47,11 +47,12 @@ export default function TopCoin({coin, position}) {
                     </div>
                     <div className={style.back}>
                         <div className={style.info}>
-                            <h6>Number of existing coins: <span>{coin.supply.total}</span></h6>
-                            <h6>Price: <span>{coin.price}</span></h6>
-                            <h6>Market capitalization: <span>{coin.marketCap}</span></h6>
-                            <h6>Website: <span><a href={coin.websiteUrl}
-                                                  target={'_blank'}>{coin.websiteUrl}</a></span></h6>
+                            {coin.supply.total && <h6>Number of existing coins: <span>{coin.supply.total}</span></h6>}
+                            {coin.price && <h6>Price: <span>{coin.price}</span></h6>}
+                            {coin.marketCap && <h6>Market capitalization: <span>{coin.marketCap}</span></h6>}
+                            {coin.websiteUrl && <h6>Website: <span><a href={coin.websiteUrl}
+                                                                      target={'_blank'}>{coin.websiteUrl}</a></span>
+                            </h6>}
                             <Sparklines data={coin.sparkline.map(i => +i)}>
                                 <SparklinesLine color="orange"/>
                             </Sparklines>

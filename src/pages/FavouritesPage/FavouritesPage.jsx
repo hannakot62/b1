@@ -10,7 +10,7 @@ export default function FavouritesPage() {
     const dispatch = useDispatch()
     const [activeModal, setActiveModal] = useState(false);
     const [modalChildren, setModalChildren] = useState(<></>);
-    const [coins, setCoins] = useState(null);
+    const [coins, setCoins] = useState([]);
 
     const favs = useSelector(state => state.favs)
     const isLoading = useSelector(state => state.isLoading)
@@ -21,27 +21,36 @@ export default function FavouritesPage() {
     };
 
     useEffect(() => {
-        async function fetchCoin(uuid) {
-            const response = await fetch(`https://api.coinranking.com/v2/coin/${uuid}`, options)
-            const json = await response.json()
-            return await json.data.coin
-        }
+        const fetchData = async () => {
+            dispatch(setIsLoading())
+            const fetchedData = [];
+            for (const uuid of favs) {
+                try {
+                    const response = await fetch(`https://api.coinranking.com/v2/coin/${uuid}`, options)
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const result = await response.json();
+                    const coinData = await result.data.coin
+                    fetchedData.push(coinData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+            setCoins(fetchedData);
+        };
 
-        async function mapCoins() {
-            await Promise.all(favs.map(async uuid => await fetchCoin(uuid))).then(r => setCoins(r))
-        }
-
-        dispatch(setIsLoading())
-        mapCoins().then(() => dispatch(unsetIsLoading()))
+        fetchData().then(dispatch(unsetIsLoading()))
     }, [favs]);
 
+    console.log(favs)
     return (
 
         <div className={style.wrapper}>
             {isLoading ? <Loader/> : <>
                 <Modal active={activeModal} setActive={setActiveModal} children={modalChildren}/>
                 {favs.length === 0 ? <h3>No favourites added yet 🤷‍♀️</h3> : <>
-                    {coins &&
+                    {!!coins.length &&
                         <CoinsTable coins={coins} setActiveModal={setActiveModal} setModalChildren={setModalChildren}
                                     fav={true}/>}</>}
             </>}
