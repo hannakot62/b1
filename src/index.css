@@ -3,11 +3,16 @@
     --primary-bg2: #04070a;
     --footer: rgba(0,0,0,0.5);
     --header: rgba(8, 49, 48, 0.2);
+    --header-hover: rgba(5, 17, 16, 0.71);
     --accent-green: #00a571;
+    --accent-green-hover: #085b42;
     --accent-red: #ff5858;
     --primary-dark-blue: #0c1923;
     --primary-lighter-blue: #213d52;
     --accent-bright-blue: #08f3fe;
+    --remove: #ae0000;
+    --remove-hover: #6e0404;
+
 }
 
 body{

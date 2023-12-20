@@ -3,8 +3,10 @@ import UnfilledHeartIcon from "../../svg/UnfilledHeartIcon";
 import {useEffect, useState} from "react";
 
 import {Slider, Box} from "@mui/material";
+import {useSelector} from "react-redux";
+import FilledHeartIcon from "../../svg/FilledHeartIcon";
 
-export default function CoinsTable({coins}) {
+export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
     const [price, setPrice] = useState(false);
     const [name, setName] = useState(false);
     const [volume, setVolume] = useState(false);
@@ -13,6 +15,8 @@ export default function CoinsTable({coins}) {
 
     const [coinsSorted, setCoinsSorted] = useState(coins);
     const [trs, setTrs] = useState(null);
+
+    const favs = useSelector(state=>state.favs)
 
 
     const handleSort = (type) => {
@@ -58,9 +62,15 @@ export default function CoinsTable({coins}) {
             <td>{coin["24hVolume"]}</td>
             <td className={Number(coin.change) < 0 ? style.red : style.green}>{coin.change}</td>
             <td>{coin.marketCap}</td>
-            <td><UnfilledHeartIcon/></td>
+
+            <td className={style.heart}>{favs.includes(coin.uuid) ?
+                <FilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                                 symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/> :
+                <UnfilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                                   symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/>}</td>
+
         </tr>))
-    }, [coins, coinsSorted, name, change, price, marketCap, volume]);
+    }, [coins,favs, coinsSorted, name, change, price, marketCap, volume]);
 
 
     const [marketCapValue, setMarketCapValue] = useState([Math.min(...coins.map(c => +c.marketCap)), Math.max(...coins.map(c => c.marketCap))]);

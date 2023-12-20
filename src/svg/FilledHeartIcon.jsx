@@ -1,6 +1,30 @@
-export default function FilledHeartIcon() {
+import {useDispatch} from "react-redux";
+import modalStyle from '../components/Modal/Modal.module.css'
+import {removeFav} from "../store/slices/favsSlice.js";
+
+
+export default function FilledHeartIcon({setActiveModal,setModalChildren, symbol, iconUrl, uuid}) {
+    const dispatch = useDispatch()
+
+    const handleClick = () => {
+        const handleRemove = () => {
+            dispatch(removeFav(uuid))
+            setActiveModal(false)
+        }
+
+        setModalChildren(<>
+            <h3>Are you sure you want to remove {symbol} from favourites?</h3>
+            <img src={iconUrl} alt={symbol}/>
+            <div className={modalStyle.buttons}>
+                <button className={modalStyle.remove} onClick={() => handleRemove()}>remove</button>
+                <button className={modalStyle.cancel} onClick={() => setActiveModal(false)}>cancel</button>
+            </div>
+        </>)
+        setActiveModal(true)
+    }
     return (
-        <div title={'remove from favourites'} style={{width: "20px", height: "20px"}}>
+        <div title={'remove from favourites'} style={{width: "20px", height: "20px", cursor: "pointer"}}
+             onClick={() => handleClick()}>
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>

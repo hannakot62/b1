@@ -17,8 +17,8 @@ export const favsSlice = createSlice({
             setFavsToLS(state)
         },
         removeFav: (state, action) => {
-            state = state.filter(uuid => uuid !== action.payload)
-            setFavsToLS(state)
+            setFavsToLS(state.filter(uuid => uuid !== action.payload))
+            return state.filter(uuid => uuid !== action.payload)
         }
     }
 })
