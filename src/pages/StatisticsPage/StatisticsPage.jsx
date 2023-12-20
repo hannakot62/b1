@@ -17,32 +17,56 @@ export default function StatisticsPage() {
         dispatch(fetchStats())
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         const options = {
             headers: {
                 'x-access-token': import.meta.env.VITE_COINRANKING_API_KEY,
             },
         };
 
-        async function fetchCoin(uuid) {
-            const response = await fetch(`https://api.coinranking.com/v2/coin/${uuid}`, options)
-            const json = await response.json()
-            return await json.data.coin
-        }
-        async function fetchBest(){
+        const fetchBest = async () => {
             dispatch(setIsLoading())
-            await Promise.all(stats.bestCoins.map(async coin => await fetchCoin(coin.uuid))).then(r => setBest(r))
-        }
-        async function fetchNewest(){
+            const fetchedData = [];
+            for (const coin of stats.bestCoins) {
+                try {
+                    const response = await fetch(`https://api.coinranking.com/v2/coin/${coin.uuid}`, options)
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const result = await response.json();
+                    const coinData = await result.data.coin
+                    fetchedData.push(coinData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+            setBest(fetchedData);
+        };
+
+        const fetchNewest = async () => {
             dispatch(setIsLoading())
-            await Promise.all(stats.newestCoins.map(async coin => await fetchCoin(coin.uuid))).then(r => setNewest(r))
-        }
-        fetchBest().then(()=>dispatch(unsetIsLoading()))
-        fetchNewest().then(()=>dispatch(unsetIsLoading()))
+            const fetchedData = [];
+            for (const coin of stats.newestCoins) {
+                try {
+                    const response = await fetch(`https://api.coinranking.com/v2/coin/${coin.uuid}`, options)
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const result = await response.json();
+                    const coinData = await result.data.coin
+                    fetchedData.push(coinData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+            setNewest(fetchedData);
+        };
 
-    },[stats])
+        fetchBest().then(dispatch(unsetIsLoading()))
+        fetchNewest().then(dispatch(unsetIsLoading()))
 
-    console.log(newest)
+    }, [stats])
+
     return (isLoading ? <Loader/> :
             (<div className={style.wrapper}>
                 {stats && <div className={style.info}>
@@ -51,15 +75,15 @@ export default function StatisticsPage() {
                     <h3>Market capitalization: <span>{stats.totalMarketCap}</span></h3>
                     <h3>Total trade volume in 24h: <span>{stats.total24hVolume}</span></h3>
                 </div>}
-                <h2>Three best performing coins in the last 24h</h2>
 
-                {stats && <div className={style.best}>
+                {!!best.length && <h2>Three best performing coins in the last 24h</h2>}
+                {!!best.length && <div className={style.best}>
                     <TopCoin coin={best[1]} position={2}/>
                     <TopCoin coin={best[0]} position={1}/>
                     <TopCoin coin={best[2]} position={3}/>
                 </div>}
 
-                {!!newest.length&&<h2 className={style.dark}>Three newest coins</h2>}
+                {!!newest.length && <h2 className={style.dark}>Three newest coins</h2>}
                 {!!newest.length && <div className={style.newest}>
                     <TopCoin coin={newest[0]} position={0}/>
                     <TopCoin coin={newest[1]} position={0}/>
