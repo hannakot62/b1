@@ -15,10 +15,15 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
     const [marketCap, setMarketCap] = useState(false);
 
     const [coinsSorted, setCoinsSorted] = useState(coins);
+    useEffect(() => {
+        setCoinsSorted(...coins)
+    }, [coins]);
+
     const [trs, setTrs] = useState(null);
 
     const favs = useSelector(state => state.favs)
-
+    console.log(coins)
+console.log(coinsSorted)
 
     const handleSort = (type) => {
         switch (type) {

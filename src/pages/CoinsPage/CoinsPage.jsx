@@ -4,16 +4,18 @@ import {fetchCoins} from "../../store/slices/coinsSlice.js";
 import {useEffect, useState} from "react";
 import CoinsTable from "../../components/CoinsTable/CoinsTable";
 import Modal from "../../components/Modal/Modal.jsx";
+import Loader from "../../components/Loader/Loader";
 
 
 export default function CoinsPage() {
     const dispatch = useDispatch()
-    const coins = useSelector(state=>state.coins)
-    // useEffect(() => {
-    //     dispatch(fetchCoins())
-    // }, []);
+    const isLoading = useSelector(state => state.isLoading)
+    useEffect(() => {
+        dispatch(fetchCoins())
+    }, []);
     const [activeModal, setActiveModal] = useState(false);
     const [modalChildren, setModalChildren] = useState(<></>);
+    const coins = useSelector(state => state.coins)
 
     return (
         <div className={style.wrapper}>
@@ -24,14 +26,14 @@ export default function CoinsPage() {
             <div className={style.bg2}></div>
 
 
-            <div className={style.content}>
+            {isLoading ? <Loader/> : <div className={style.content}>
                 <div className={style.header}>
-                <h1>Top 50 coins with highest market capitalization in last 24h</h1>
-                <h1>Top 50 coins with highest market capitalization in last 24h</h1>
+                    <h1>Top 50 coins with highest market capitalization in last 24h</h1>
+                    <h1>Top 50 coins with highest market capitalization in last 24h</h1>
                 </div>
-                //filters
-                <CoinsTable coins={coins} setActiveModal={setActiveModal} setModalChildren={setModalChildren}  fav={false}/>
-            </div>
+                {coins.length&& <CoinsTable coins={coins} setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                            fav={false}/>}
+            </div>}
         </div>
     )
 }
