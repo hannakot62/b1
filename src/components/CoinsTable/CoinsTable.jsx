@@ -5,8 +5,9 @@ import {useEffect, useState} from "react";
 import {Slider, Box} from "@mui/material";
 import {useSelector} from "react-redux";
 import FilledHeartIcon from "../../svg/FilledHeartIcon";
+import {Sparklines, SparklinesLine} from "react-sparklines";
 
-export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
+export default function CoinsTable({coins, setActiveModal, setModalChildren, fav}) {
     const [price, setPrice] = useState(false);
     const [name, setName] = useState(false);
     const [volume, setVolume] = useState(false);
@@ -16,7 +17,7 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
     const [coinsSorted, setCoinsSorted] = useState(coins);
     const [trs, setTrs] = useState(null);
 
-    const favs = useSelector(state=>state.favs)
+    const favs = useSelector(state => state.favs)
 
 
     const handleSort = (type) => {
@@ -54,23 +55,29 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
         }
     }
     useEffect(() => {
-        setTrs(coinsSorted.map(coin => <tr>
-            <td>{coin.symbol}</td>
-            <td className={style.center}><img src={coin.iconUrl} alt={coin.symbol}/></td>
-            <td>{coin.name}</td>
-            <td>{coin.price}</td>
-            <td>{coin["24hVolume"]}</td>
-            <td className={Number(coin.change) < 0 ? style.red : style.green}>{coin.change}</td>
-            <td>{coin.marketCap}</td>
+        setTrs(coinsSorted.map(coin => <>
+            <tr>
+                <td>{coin.symbol}</td>
+                <td className={style.center}><img src={coin.iconUrl} alt={coin.symbol}/></td>
+                <td>{coin.name}</td>
+                <td>{coin.price}</td>
+                <td>{coin["24hVolume"]}</td>
+                <td className={Number(coin.change) < 0 ? style.red : style.green}>{coin.change}</td>
+                <td>{coin.marketCap}</td>
 
-            <td className={style.heart}>{favs.includes(coin.uuid) ?
-                <FilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
-                                 symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/> :
-                <UnfilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
-                                   symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/>}</td>
+                <td className={style.heart}>{favs.includes(coin.uuid) ?
+                    <FilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                                     symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/> :
+                    <UnfilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                                       symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/>}</td>
 
-        </tr>))
-    }, [coins,favs, coinsSorted, name, change, price, marketCap, volume]);
+            </tr>
+            {fav && <tr>
+                <td style={{height: "20px"}} colSpan={8}><Sparklines data={coin.sparkline.map(i => +i)}>
+                    <SparklinesLine color={coin.color}/>
+                </Sparklines></td>
+            </tr>}</>))
+    }, [coins, favs, coinsSorted, name, change, price, marketCap, volume]);
 
 
     const [marketCapValue, setMarketCapValue] = useState([Math.min(...coins.map(c => +c.marketCap)), Math.max(...coins.map(c => c.marketCap))]);
@@ -91,7 +98,7 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
     useEffect(() => {
         setCoinsSorted(coins.filter(c => (c['24hVolume'] >= volumeValue[0] && c['24hVolume'] <= volumeValue[1])
             && (c.marketCap >= marketCapValue[0] && c.marketCap <= marketCapValue[1]) && (c.price >= priceValue[0] && c.price <= priceValue[1])))
-    }, [marketCapValue, priceValue, volumeValue]);
+    }, [marketCapValue, priceValue, volumeValue, coins]);
 
 
     return (
@@ -136,7 +143,7 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
                     />
                 </Box>
             </div>
-
+            <h6>search results: {coinsSorted.length}</h6>
             <table className={style.table}>
                 <thead>
                 <tr>
@@ -155,7 +162,7 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren}) {
                 <tbody>
                 {trs}                </tbody>
             </table>
-            {(!trs||!trs.length)&&<p>no matches 😲</p>}
+            {(!trs || !trs.length) && <p>no matches 😲</p>}
         </div>
     )
 }

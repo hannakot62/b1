@@ -30,7 +30,7 @@ export default function CoinsPage() {
                 <h1>Top 50 coins with highest market capitalization in last 24h</h1>
                 </div>
                 //filters
-                <CoinsTable coins={coins} setActiveModal={setActiveModal} setModalChildren={setModalChildren}/>
+                <CoinsTable coins={coins} setActiveModal={setActiveModal} setModalChildren={setModalChildren}  fav={false}/>
             </div>
         </div>
     )
