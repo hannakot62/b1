@@ -1,18 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {setIsLoading, unsetIsLoading} from "./isLoadingSlice.js";
 import {setError} from "./errorSlice.js";
+import fetchOptions from "../../const/fetchOptions.js";
 
 
 export const fetchCoins = () => {
-    const options = {
-        headers: {
-            'x-access-token': import.meta.env.VITE_COINRANKING_API_KEY,
-        },
-    };
-
     return function (dispatch) {
         dispatch(setIsLoading())
-        fetch("https://api.coinranking.com/v2/coins", options)
+        fetch("https://api.coinranking.com/v2/coins", fetchOptions)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Error[${response.status}]: ${response.message}`)

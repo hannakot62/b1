@@ -7,6 +7,7 @@ import Loader from "../../components/Loader/Loader";
 import {setIsLoading, unsetIsLoading} from "../../store/slices/isLoadingSlice.js";
 import {setError} from "../../store/slices/errorSlice.js";
 import ErrorPage from "../ErrorPage/ErrorPage.jsx";
+import fetchOptions from "../../const/fetchOptions.js";
 
 
 
@@ -24,60 +25,33 @@ export default function StatisticsPage() {
     }, []);
 
     useEffect(() => {
-        const options = {
-            headers: {
-                'x-access-token': import.meta.env.VITE_COINRANKING_API_KEY,
-            },
-        };
-
-        const fetchBest = async () => {
-            dispatch(setIsLoading())
+        const fetchData = async (coinsArray, type) => {
+            dispatch(setIsLoading());
             const fetchedData = [];
-            for (const coin of stats.bestCoins) {
 
+            for (const coin of coinsArray) {
                 try {
-                    const response = await fetch(`https://api.coinranking.com/v2/coin/${coin.uuid}`, options)
-                    if (!response.ok) {
-                        throw new Error(`Error[${response.status}]: ${response.message}`)
-                    }
-                    const result = await response.json();
-                    const coinData = await result.data.coin
-                    fetchedData.push(coinData);
+                    const response = await fetch(`https://api.coinranking.com/v2/coin/${coin.uuid}`, fetchOptions);
 
+                    if (!response.ok) {
+                        throw new Error(`Error [${response.status}]: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    const coinData = await result.data.coin;
+                    fetchedData.push(coinData);
                 } catch (error) {
-                    console.error('Error fetching best:', error);
-                    dispatch(setError(error))
+                    console.error(`Error fetching ${type}:`, error);
+                    dispatch(setError(error));
                 }
             }
-            setBest(fetchedData);
-        };
+            type === 'best' ? setBest(fetchedData) : setNewest(fetchedData);
+            dispatch(unsetIsLoading());
+        }
 
-        const fetchNewest = async () => {
-            dispatch(setIsLoading())
-            const fetchedData = [];
-            for (const coin of stats.newestCoins) {
-
-                try {
-                    const response = await fetch(`https://api.coinranking.com/v2/coin/${coin.uuid}`, options)
-                    if (!response.ok) {
-                        throw new Error(`Error[${response.status}]: ${response.message}`)
-                    }
-                    const result = await response.json();
-                    const coinData = await result.data.coin
-                    fetchedData.push(coinData);
-
-                } catch (error) {
-                    console.error('Error fetching newest:', error);
-                    dispatch(setError(error))
-                }
-            }
-            setNewest(fetchedData);
-        };
-
-        fetchBest().then(dispatch(unsetIsLoading()))
-        fetchNewest().then(dispatch(unsetIsLoading()))
-
-    }, [stats])
+        fetchData(stats.bestCoins, 'best');
+        fetchData(stats.newestCoins, 'newest');
+    }, [stats, dispatch]);
 
     return (
         <> {error ? <ErrorPage/> :

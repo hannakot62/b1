@@ -7,6 +7,7 @@ import {setIsLoading, unsetIsLoading} from "../../store/slices/isLoadingSlice.js
 import Loader from "../../components/Loader/Loader";
 import ErrorPage from "../ErrorPage/ErrorPage.jsx";
 import {setError} from "../../store/slices/errorSlice.js";
+import fetchOptions from "../../const/fetchOptions.js";
 
 
 export default function FavouritesPage() {
@@ -20,40 +21,35 @@ export default function FavouritesPage() {
     const isLoading = useSelector(state => state.isLoading)
     const error = useSelector(state => state.error)
 
-    const options = {
-        headers: {
-            'x-access-token': import.meta.env.VITE_COINRANKING_API_KEY,
-        },
-    };
-
     useEffect(() => {
         const fetchData = async () => {
-            dispatch(setIsLoading())
-            const fetchedData = [];
+            dispatch(setIsLoading());
 
-            for (const uuid of favs) {
-                try {
-                    const response = await fetch(`https://api.coinranking.com/v2/coin/${uuid}`, options)
+            try {
+                const fetchedData = await Promise.all(
+                    favs.map(async uuid => {
+                        const response = await fetch(`https://api.coinranking.com/v2/coin/${uuid}`, fetchOptions);
 
-                    if (!response.ok) {
-                        throw new Error(`Error[${response.status}]: ${response.message}`)
-                    }
+                        if (!response.ok) {
+                            throw new Error(`Error [${response.status}]: ${response.statusText}`);
+                        }
 
-                    const result = await response.json();
-                    const coinData = await result.data.coin
-                    fetchedData.push(coinData);
+                        const result = await response.json();
+                        return result.data.coin;
+                    })
+                )
+                setCoins(fetchedData)
 
-                } catch (error) {
-                    console.error('Error fetching favourites:', error);
-                    dispatch(setError(error))
-                }
+            } catch (error) {
+                console.error('Error fetching favourites:', error)
+                dispatch(setError(error))
+            } finally {
+                dispatch(unsetIsLoading())
             }
-            setCoins(fetchedData);
         };
 
-        fetchData().then(dispatch(unsetIsLoading()))
-    }, [favs]);
-
+        fetchData();
+    }, [favs, dispatch]);
 
     return (
         <> {error ? <ErrorPage/> :
