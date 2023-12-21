@@ -49,10 +49,4 @@
     - Test the display of error messages when there's no data or incorrect API requests.
     - Ensure the application handles network errors properly.
 
-### 6. Performance Testing:
-
-- Performance:
-    - Check the application and individual screen loading speeds.
-    - Test device resource usage (memory, processor).
-
 ---
