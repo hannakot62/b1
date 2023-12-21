@@ -31,11 +31,13 @@ export default favsSlice.reducer
 export function setFavsToLS(favs) {
     localStorage.setItem('favs', JSON.stringify(favs))
 }
+
 export function getFavsFromLS() {
     if (localStorage.getItem('favs')) {
         return JSON.parse(localStorage.getItem('favs'))
     }
 }
+
 export function deleteFavsFromLS() {
     localStorage.removeItem('favs')
 }

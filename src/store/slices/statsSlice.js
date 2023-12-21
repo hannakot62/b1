@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {setIsLoading, unsetIsLoading} from "./isLoadingSlice.js";
-
+import {setError} from "./errorSlice.js";
 
 export const fetchStats = () => {
     const options = {
@@ -8,13 +8,24 @@ export const fetchStats = () => {
             'x-access-token': import.meta.env.VITE_COINRANKING_API_KEY,
         },
     };
+
     return function (dispatch) {
         dispatch(setIsLoading())
         fetch("https://api.coinranking.com/v2/stats", options)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error[${response.status}]: ${response.message}`)
+                }
+                return response.json()
+            })
             .then(json => {
                 dispatch(getStats(json.data))
-            }).then(() => dispatch(unsetIsLoading()))
+            })
+            .catch(error => {
+                console.error("Error fetching stats:", error)
+                dispatch(setError(error))
+            })
+            .finally(() => dispatch(unsetIsLoading()))
     }
 }
 

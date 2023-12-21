@@ -19,8 +19,11 @@ export default function UnfilledHeartIcon({setActiveModal,setModalChildren, symb
                 <button className={modalStyle.cancel} onClick={() => setActiveModal(false)}>cancel</button>
             </div>
         </>)
+
         setActiveModal(true)
     }
+
+
     return (
         <div title={'add to favourites'} style={{width: "20px", height: "20px", cursor: "pointer"}}
              onClick={() => handleClick()}>

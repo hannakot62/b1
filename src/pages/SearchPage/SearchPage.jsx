@@ -8,6 +8,8 @@ import MarketSearchList from "../../components/MarketSearchList/MarketSearchList
 import {useDispatch, useSelector} from "react-redux";
 import {setIsLoading, unsetIsLoading} from "../../store/slices/isLoadingSlice.js";
 import Loader from "../../components/Loader/Loader";
+import {setError} from "../../store/slices/errorSlice.js";
+import ErrorPage from "../ErrorPage/ErrorPage.jsx";
 
 export default function SearchPage() {
     const [value, setValue] = useState('');
@@ -16,11 +18,13 @@ export default function SearchPage() {
     const [markets, setMarkets] = useState([]);
     const [guys, setGuys] = useState(true);
     const [nothing, setNothing] = useState(false);
-    const dispatch = useDispatch()
-    const isLoading = useSelector(state=>state.isLoading)
-
     const [activeModal, setActiveModal] = useState(false);
     const [modalChildren, setModalChildren] = useState(<></>);
+
+    const dispatch = useDispatch()
+    const isLoading = useSelector(state => state.isLoading)
+    const error = useSelector(state => state.error)
+
     const handleReset = () => {
         setValue('')
         setMarkets([])
@@ -42,50 +46,70 @@ export default function SearchPage() {
         };
 
         fetch(`https://api.coinranking.com/v2/search-suggestions?query=${value}`, options)
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Error[${response.status}]: ${response.message}`)
+                }
+                return response.json()
+            })
             .then((result) => {
                 setCoins(result.data.coins)
                 setExchanges(result.data.exchanges)
                 setMarkets(result.data.markets)
 
-                if(result.data.coins.length===0&&result.data.exchanges.length===0&&result.data.markets.length===0) {
+                if (result.data.coins.length === 0 && result.data.exchanges.length === 0 && result.data.markets.length === 0) {
                     setGuys(true)
                     setNothing(true)
                 }
-                dispatch(unsetIsLoading())
-            });
+            })
+            .catch(error => {
+                console.log("Error fetching search: ", error)
+                dispatch(setError(error))
 
+            })
+            .finally(() => dispatch(unsetIsLoading())
+            );
     }
+
     return (
-        <div className={style.wrapper}>
-            {isLoading?<Loader/>:<>
-            <Modal active={activeModal} setActive={setActiveModal} children={modalChildren}/>
-            <div className={style.search}>
-                <label>Enter search query to find coins / exchanges / markets:<input value={value}
-                                                                                     onChange={(e) => setValue(e.target.value)}/></label>
-                <div className={style.buttons}>
-                    <button className={style.searchBtn} onClick={() => handleSearch()}>search</button>
-                    <button className={style.cleanBtn} onClick={() => handleReset()}>reset</button>
-                </div>
-            </div>
-            {nothing&&<h1 className={style.nothing}>Nothing was found 😿</h1>}
-            {guys && <Guys/>}
+        <> {error ? <ErrorPage/> :
+            <div className={style.wrapper}>
 
-            {!!coins.length && <div className={style.coins}>
-                <h1>Coins found:</h1>
-                <CoinSearchList coins={coins} setActiveModal={setActiveModal} setModalChildren={setModalChildren}/>
-            </div>}
+                {isLoading ? <Loader/>
+                    : <>
+                        <Modal active={activeModal} setActive={setActiveModal} children={modalChildren}/>
 
-            {!!exchanges.length && <div className={style.exchanges}>
-                <h1>Exchanges found:</h1>
-                <ExchangeSearchList exchanges={exchanges}/>
-            </div>}
+                        <div className={style.search}>
+                            <label>Enter search query to find coins / exchanges / markets:<input value={value}
+                                                                                                 onChange={(e) => setValue(e.target.value)}/></label>
+                            <div className={style.buttons}>
+                                <button className={style.searchBtn} onClick={() => handleSearch()}>search</button>
+                                <button className={style.cleanBtn} onClick={() => handleReset()}>reset</button>
+                            </div>
+                        </div>
 
-            {!!markets.length &&<div className={style.markets}>
-                <h1>Markets found:</h1>
-                <MarketSearchList markets={markets}/>
+                        {nothing && <h1 className={style.nothing}>Nothing was found 😿</h1>}
+                        {guys && <Guys/>}
+
+                        {!!coins.length && <div className={style.coins}>
+                            <h1>Coins found:</h1>
+                            <CoinSearchList coins={coins} setActiveModal={setActiveModal}
+                                            setModalChildren={setModalChildren}/>
+                        </div>}
+
+                        {!!exchanges.length && <div className={style.exchanges}>
+                            <h1>Exchanges found:</h1>
+                            <ExchangeSearchList exchanges={exchanges}/>
+                        </div>}
+
+                        {!!markets.length && <div className={style.markets}>
+                            <h1>Markets found:</h1>
+                            <MarketSearchList markets={markets}/>
+                        </div>}
+                    </>
+                }
+
             </div>}
-            </>}
-        </div>
+        </>
     )
 }

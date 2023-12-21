@@ -1,11 +1,11 @@
 import style from './CoinsTable.module.css'
 import UnfilledHeartIcon from "../../svg/UnfilledHeartIcon";
 import {useEffect, useState} from "react";
-
 import {Slider, Box} from "@mui/material";
 import {useSelector} from "react-redux";
 import FilledHeartIcon from "../../svg/FilledHeartIcon";
 import {Sparklines, SparklinesLine} from "react-sparklines";
+
 
 export default function CoinsTable({coins, setActiveModal, setModalChildren, fav}) {
     const [price, setPrice] = useState(false);
@@ -13,15 +13,50 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
     const [volume, setVolume] = useState(false);
     const [change, setChange] = useState(false);
     const [marketCap, setMarketCap] = useState(false);
-
     const [coinsSorted, setCoinsSorted] = useState(coins);
+    const [trs, setTrs] = useState(null);
+
+    const favs = useSelector(state => state.favs)
+
+    const [marketCapValue, setMarketCapValue] = useState([Math.min(...coins.map(c => +c.marketCap)), Math.max(...coins.map(c => c.marketCap))]);
+    const [priceValue, setPriceValue] = useState([Math.min(...coins.map(c => +c.price)), Math.max(...coins.map(c => c.price))]);
+    const [volumeValue, setVolumeValue] = useState([Math.min(...coins.map(c => +c['24hVolume'])), Math.max(...coins.map(c => +c['24hVolume']))])
+
     useEffect(() => {
         setCoinsSorted(coins)
     }, [coins]);
 
-    const [trs, setTrs] = useState(null);
+    useEffect(() => {
+        setTrs(coinsSorted.map(coin => <>
+            <tr>
+                <td>{coin.symbol}</td>
+                <td className={style.center}><img src={coin.iconUrl} alt={coin.symbol}/></td>
+                <td>{coin.name}</td>
+                <td>{coin.price}</td>
+                <td>{coin["24hVolume"]}</td>
+                <td className={Number(coin.change) < 0 ? style.red : style.green}>{coin.change}</td>
+                <td>{coin.marketCap}</td>
 
-    const favs = useSelector(state => state.favs)
+                <td className={style.heart}>{favs.includes(coin.uuid) ?
+                    <FilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                                     symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/> :
+                    <UnfilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
+                                       symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/>}</td>
+
+            </tr>
+            {fav && <tr>
+                <td style={{height: "20px"}} colSpan={8}><Sparklines data={coin.sparkline.map(i => +i)}>
+                    <SparklinesLine color={coin.color}/>
+                </Sparklines></td>
+            </tr>}</>))
+    }, [coins, favs, coinsSorted, name, change, price, marketCap, volume]);
+
+
+    useEffect(() => {
+        setCoinsSorted(coins.filter(c => (c['24hVolume'] >= volumeValue[0] && c['24hVolume'] <= volumeValue[1])
+            && (c.marketCap >= marketCapValue[0] && c.marketCap <= marketCapValue[1]) && (c.price >= priceValue[0] && c.price <= priceValue[1])))
+    }, [marketCapValue, priceValue, volumeValue, coins]);
+
 
     const handleSort = (type) => {
         switch (type) {
@@ -57,35 +92,6 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
             }
         }
     }
-    useEffect(() => {
-        setTrs(coinsSorted.map(coin => <>
-            <tr>
-                <td>{coin.symbol}</td>
-                <td className={style.center}><img src={coin.iconUrl} alt={coin.symbol}/></td>
-                <td>{coin.name}</td>
-                <td>{coin.price}</td>
-                <td>{coin["24hVolume"]}</td>
-                <td className={Number(coin.change) < 0 ? style.red : style.green}>{coin.change}</td>
-                <td>{coin.marketCap}</td>
-
-                <td className={style.heart}>{favs.includes(coin.uuid) ?
-                    <FilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
-                                     symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/> :
-                    <UnfilledHeartIcon setActiveModal={setActiveModal} setModalChildren={setModalChildren}
-                                       symbol={coin.symbol} iconUrl={coin.iconUrl} uuid={coin.uuid}/>}</td>
-
-            </tr>
-            {fav && <tr>
-                <td style={{height: "20px"}} colSpan={8}><Sparklines data={coin.sparkline.map(i => +i)}>
-                    <SparklinesLine color={coin.color}/>
-                </Sparklines></td>
-            </tr>}</>))
-    }, [coins, favs, coinsSorted, name, change, price, marketCap, volume]);
-
-
-    const [marketCapValue, setMarketCapValue] = useState([Math.min(...coins.map(c => +c.marketCap)), Math.max(...coins.map(c => c.marketCap))]);
-    const [priceValue, setPriceValue] = useState([Math.min(...coins.map(c => +c.price)), Math.max(...coins.map(c => c.price))]);
-    const [volumeValue, setVolumeValue] = useState([Math.min(...coins.map(c => +c['24hVolume'])), Math.max(...coins.map(c => +c['24hVolume']))])
 
 
     const handleMarketCapChange = (event, newValue) => {
@@ -98,14 +104,10 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
         setVolumeValue(newValue);
     };
 
-    useEffect(() => {
-        setCoinsSorted(coins.filter(c => (c['24hVolume'] >= volumeValue[0] && c['24hVolume'] <= volumeValue[1])
-            && (c.marketCap >= marketCapValue[0] && c.marketCap <= marketCapValue[1]) && (c.price >= priceValue[0] && c.price <= priceValue[1])))
-    }, [marketCapValue, priceValue, volumeValue, coins]);
-
 
     return (
         <div className={style.container}>
+
             <div className={style.filters}>
 
                 <label>market capitalization</label>
@@ -146,7 +148,9 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
                     />
                 </Box>
             </div>
+
             <h6>search results: {coinsSorted.length}</h6>
+
             <table className={style.table}>
                 <thead>
                 <tr>
@@ -162,9 +166,11 @@ export default function CoinsTable({coins, setActiveModal, setModalChildren, fav
                     <th>add to favourites</th>
                 </tr>
                 </thead>
+
                 <tbody>
                 {trs}
                 </tbody>
+
             </table>
             {(!trs || !trs.length) && <p>no matches 😲</p>}
         </div>

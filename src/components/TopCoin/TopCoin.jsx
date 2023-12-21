@@ -7,11 +7,9 @@ import { Sparklines, SparklinesLine } from 'react-sparklines';
 
 
 export default function TopCoin({coin, position}) {
-
     const [place, setPlace] = useState(null);
 
     useEffect(() => {
-
         switch (position) {
             case 1: {
                 setPlace(<GoldMedalIcon/>)
@@ -36,6 +34,7 @@ export default function TopCoin({coin, position}) {
         <div>
             {coin &&
                 <div className={style.card}>
+
                     <div className={style.front}>
                         <div className={style.head}>
                             {place && <div className={style.svg}>
@@ -45,6 +44,7 @@ export default function TopCoin({coin, position}) {
                         <img src={coin.iconUrl} alt={coin.symbol}/>
                         <h3>{coin.name}</h3>
                     </div>
+
                     <div className={style.back}>
                         <div className={style.info}>
                             {coin.supply.total && <h6>Number of existing coins: <span>{coin.supply.total}</span></h6>}
@@ -58,7 +58,10 @@ export default function TopCoin({coin, position}) {
                             </Sparklines>
                         </div>
                     </div>
-                </div>}
+
+
+                </div>
+            }
         </div>
     )
 }

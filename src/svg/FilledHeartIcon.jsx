@@ -20,8 +20,11 @@ export default function FilledHeartIcon({setActiveModal,setModalChildren, symbol
                 <button className={modalStyle.cancel} onClick={() => setActiveModal(false)}>cancel</button>
             </div>
         </>)
+
         setActiveModal(true)
     }
+
+
     return (
         <div title={'remove from favourites'} style={{width: "20px", height: "20px", cursor: "pointer"}}
              onClick={() => handleClick()}>
