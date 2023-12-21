@@ -38,6 +38,11 @@ This application utilizes the [Coinranking API](https://developers.coinranking.c
 - Utilize the search feature to find specific coins, markets, or exchanges.
 - Get statistics on the sphere itself.
 
+## Testing
+[CryptoCoins App Testing Plan](https://github.com/hannakot62/b1/blob/styling/testing/README.md)
+
+[Testing Screencast](https://github.com/hannakot62/b1/blob/styling/testing/b1.mp4)
+
 ## Contributing
 
 Feel free to contribute by opening issues or submitting pull requests (not sure about the last).
