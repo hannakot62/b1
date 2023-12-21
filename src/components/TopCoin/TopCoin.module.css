@@ -11,7 +11,6 @@
     height: 100%;
     width: 100%;
     border-radius: 20px;
-    padding: 15px;
     backface-visibility: hidden;
     overflow: hidden;
     position: absolute;
@@ -63,4 +62,7 @@
 
 .info span, .info a{
     color: orange;
+}
+.info{
+    padding: 10px;
 }

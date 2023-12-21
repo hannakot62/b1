@@ -18,7 +18,7 @@ export default function ErrorPage() {
             {error && (
                 <div className={style.container}>
                     <h1>Oops, something went wrong 🫢</h1>
-                    <h4>{error}</h4>
+                    <h4>{error.message}</h4>
                     <button onClick={handleReload}>reload page</button>
                 </div>
             )}

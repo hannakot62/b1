@@ -29,7 +29,7 @@
     align-items: center;
     gap: 50px;
     flex-wrap: wrap;
-    height: 400px;
+    min-height: 400px;
 }
 .best>div:nth-child(2){
     align-self: start;
@@ -45,7 +45,6 @@
     text-align: center;
     padding: 15px;
     animation: text-shadow 1.5s ease-in-out infinite;
-
 }
 
 .dark{
@@ -102,5 +101,19 @@
                 0 0 0 #2cfcfd,
                 0 0 0 #fb203b,
                 0 0 0 #fefc4b;
+    }
+}
+
+@media (max-width: 700px) {
+    .best > div:nth-child(2) {
+        order: 1;
+    }
+
+    .best > div:nth-child(1) {
+        order: 2;
+    }
+
+    .best > div:nth-child(3) {
+        order: 3;
     }
 }

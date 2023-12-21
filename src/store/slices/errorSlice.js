@@ -4,7 +4,10 @@ const errorSlice = createSlice({
     name: "error",
     initialState: null,
     reducers: {
-        setError: (state, action) => action.payload,
+        setError: (state, action) => {
+            console.log(action.payload)
+            return action.payload
+        },
         clearError: () => null,
     },
 });
