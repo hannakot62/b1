@@ -1,6 +1,6 @@
 .wrapper{
     width: 100%;
-    background-image: url("assets/main-bgg.jpg");
+    background-image: url("/assets/main-bgg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 100vh;
